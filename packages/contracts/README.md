@@ -1,6 +1,6 @@
-# Madara Swap Contracts
+# Pragma Contracts
 
-Deploy an example Dex on Madara.
+Deploy Pragma on Madara.
 
 ## Installation
 
@@ -19,6 +19,6 @@ Then use the `STARKNET_NETWORK` env variable to target madara, katana or the
 devnet. For example:
 
 ```bash
-STARKNET_NETWORK=madara python ./scripts/compile_madara_swap.py
-STARKNET_NETWORK=madara python ./scripts/deploy_madara_swap.py
+STARKNET_NETWORK=pragma_testnet python ./scripts/compile_all.py
+STARKNET_NETWORK=pragma_testnet python ./scripts/deploy_pragma.py
 ```

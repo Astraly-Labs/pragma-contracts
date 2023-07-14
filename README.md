@@ -1,4 +1,4 @@
-# Madara swap
+# Pragma 0
 
 A simple **not safe for production** dex meant to test Madara.
 
@@ -10,9 +10,8 @@ TL;DR
 cd packages/contracts
 poetry install
 cp .env.example .env
-STARKNET_NETWORK=madara poetry run python scripts/compile_madara_swap.py
-STARKNET_NETWORK=madara poetry run python scripts/deploy_madara_swap.py
-STARKNET_NETWORK=madara poetry run python scripts/simple_swap.py
+STARKNET_NETWORK=pragma_testnet poetry run python scripts/compile_all.py
+STARKNET_NETWORK=pragma_testnet poetry run python scripts/deploy_pragma.py
 ```
 
 See also the [contracts README](./packages/contracts/README.md)

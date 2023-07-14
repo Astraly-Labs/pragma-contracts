@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "madara-swap-contracts"
+name = "pragma-contracts"
 version = "0.1.0"
 description = ""
-authors = ["Clément Walter <clement0walter@gmail.com>"]
+authors = ["0xevolve <matthias@pragmaoracle.com>"]
 readme = "README.md"
 packages = [{ include = "scripts" }]
 
@@ -10,6 +10,7 @@ packages = [{ include = "scripts" }]
 python = ">=3.9,<3.10"
 cairo-lang = "^0.11.2"
 openzeppelin-cairo-contracts = "^0.6.1"
+empiric-network = "^1.6.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
