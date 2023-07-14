@@ -1,6 +1,6 @@
 # Pragma 0
 
-A simple **not safe for production** dex meant to test Madara.
+Pragma 0 contracts deployment on Madara and Pragma chain.
 
 ## Contracts
 
