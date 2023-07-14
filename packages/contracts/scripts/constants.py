@@ -17,7 +17,7 @@ NETWORKS = {
     "sharingan": {
         "name": "sharingan",
         "explorer_url": "",
-        "rpc_url": os.getenv("SHARINGAN_RPC_URL"),
+        "rpc_url": "https://sharingan.madara.zone",
     },
     "madara": {
         "name": "madara",
@@ -34,14 +34,14 @@ NETWORKS = {
         "explorer_url": "",
         "rpc_url": "http://127.0.0.1:5050/rpc",
     },
-    "pragma-testnet": {
-      "name": "pragma-testnet",
+    "pragma_testnet": {
+      "name": "pragma_testnet",
       "explorer_url": "https://testnet.pragmaoracle.com/explorer",
       "rpc_url": "https://testnet.pragmaoracle.com/rpc"
     }
 }
 
-NETWORK = NETWORKS[os.getenv("STARKNET_NETWORK", "pragma-testnet")]
+NETWORK = NETWORKS[os.getenv("STARKNET_NETWORK", "pragma_testnet")]
 NETWORK["account_address"] = os.environ.get(
     f"{NETWORK['name'].upper()}_ACCOUNT_ADDRESS"
 ) or os.environ.get("ACCOUNT_ADDRESS")
@@ -84,7 +84,8 @@ COMPILED_CONTRACTS = [
     {"contract_name": "PublisherRegistry", "is_account_contract": False},
     {"contract_name": "SummaryStats", "is_account_contract": False},
     {"contract_name": "YieldCurve", "is_account_contract": False},
-    {"contract_name": "Account", "is_account_contract": True},
+    {"contract_name": "ERC20", "is_account_contract": False},
+    {"contract_name": "OpenzeppelinAccount", "is_account_contract": True},
 ]
 
 CURRENCIES = [
