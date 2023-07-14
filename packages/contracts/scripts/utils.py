@@ -347,7 +347,6 @@ async def declare(contract_name):
     signature = message_signature(msg_hash=tx_hash, priv_key=account.signer.private_key)
     transaction = _add_signature_to_transaction(transaction, signature)
     params = _create_broadcasted_txn(transaction=transaction)
-
     res = await RPC_CLIENT._client.call(
         method_name="addDeclareTransaction",
         params=[params],

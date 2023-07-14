@@ -4,6 +4,7 @@ from asyncio import run
 from math import ceil, log
 
 from scripts.constants import COMPILED_CONTRACTS, ETH_TOKEN_ADDRESS, NETWORK, RPC_CLIENT, PAIRS, CURRENCIES
+from starknet_py.contract import ContractFunction
 from scripts.utils import (
     call,
     declare,
@@ -46,17 +47,17 @@ async def main():
         "PublisherRegistry",
         account.address
     )
-    elector = ContractFunction.get_selector("initializer")
+    selector = ContractFunction.get_selector("initializer")
     calldata = [account.address, deployments["PublisherRegistry"]["address"], len(CURRENCIES)]
     for currency in CURRENCIES:
         calldata.extend(currency.serialize())
-    calldata.append(len(pairs))
+    calldata.append(len(PAIRS))
     for pair in PAIRS:
         calldata.extend(pair.serialize())
     constructor_args = [class_hash["Oracle"], selector, calldata]
     deployments["Proxy"] = await deploy(
         "Proxy",
-        constructor_args
+        *constructor_args
     )
     dump_deployments(deployments)
 
