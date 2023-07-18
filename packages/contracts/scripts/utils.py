@@ -385,12 +385,12 @@ async def deploy(contract_name, *args):
     }
 
 
-async def invoke(contract_name, function_name, *inputs, address=None):
+async def invoke(contract_name, function_name, *inputs, address=None, abi=None):
     account = await get_starknet_account()
     deployments = get_deployments()
     contract = Contract(
         deployments[contract_name]["address"] if address is None else address,
-        json.load(open(get_artifact(contract_name)))["abi"],
+        json.load(open(get_artifact(contract_name)))["abi"] if abi is None else abi,
         account,
     )
     call = contract.functions[function_name].prepare(*inputs, max_fee=int(1e17))
