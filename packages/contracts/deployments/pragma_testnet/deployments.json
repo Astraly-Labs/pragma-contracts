@@ -1,0 +1,12 @@
+{
+  "PublisherRegistry": {
+    "address": "0x45f140d6888bc004137931da383f042abf97bb54cfa17ce187057d3fb443a09",
+    "tx": "0x18f6344ff45f39e990d3a2bbe0435ce658fbd5152ac9bd145927979f22d6a79",
+    "artifact": "build/PublisherRegistry.json"
+  },
+  "Proxy": {
+    "address": "0x55f411095c3f7a330a5893f486f5a3f953d3115235f8d50e447c9326f442296",
+    "tx": "0x2322dcbaf9dc2c231bc6f97278168df7370a747b6648808382f331f0fef7c5e",
+    "artifact": "build/Proxy.json"
+  }
+}

@@ -431,7 +431,7 @@ async def wait_for_transaction(*args, **kwargs):
         0.1
         if NETWORK["name"] in ["devnet", "katana"]
         else 1
-        if NETWORK["name"] in ["madara"]
+        if NETWORK["name"] in ["madara", "pragma_testnet"]
         else 6,
     )
     max_wait = kwargs.get(
