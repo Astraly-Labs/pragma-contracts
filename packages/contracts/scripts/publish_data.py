@@ -19,10 +19,23 @@ from scripts.utils import (
     get_artifact
 )
 
+from empiric.publisher.client import EmpiricPublisherClient
+from empiric.publisher.fetchers import (
+    BitstampFetcher,
+    CexFetcher,
+    CoinbaseFetcher,
+    AscendexFetcher,
+    DefillamaFetcher
+)
+from empiric.publisher.assets import get_spot_asset_spec_for_pair_id
+from empiric.core.entry import SpotEntry
+
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+ASSETS = "BTC/USD,ETH/USD,SOL/USD,DOGE/USD,BTC/EUR,USDC/USD,USDT/USD"
 
 
 # %% Main
@@ -35,27 +48,43 @@ async def main():
     account = await get_starknet_account()
     
     # %% Add publisher
-    # await invoke("PublisherRegistry", "add_publisher", "PRAGMA", account.address)
-    # logger.info(
-    #     f"ℹ️  Publisher 'PRAGMA' added"
-    # )
-    # await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "PRAGMA")
-    # logger.info(
-    #     f"ℹ️  Source 'PRAGMA' added for publisher 'PRAGMA' "
-    # )
+    await invoke("PublisherRegistry", "add_publisher", "PRAGMA", account.address)
+    logger.info(
+        f"ℹ️  Publisher 'PRAGMA' added"
+    )
+    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "BITSTAMP")
+    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "CEX")
+    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "COINBASE")
+    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "ASCENDEX")
+    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "DEFILLAMA")
+    logger.info(
+        f"ℹ️  Sources added for publisher 'PRAGMA' "
+    )
 
 
     # %% Publish data
-    abi = json.load(open(get_artifact("Oracle")))["abi"]
-    mock_spot_entry = {
-                "pair_id": "ETH/USD",
-                "price": 1900,
-                "volume": 0,
-                "base" : {"timestamp": int(time.time()),
-                "source": "PRAGMA",
-                "publisher": "PRAGMA",}
-            }
-    await invoke("Proxy", "publish_spot_entry", mock_spot_entry, abi=abi)
+    assets = [get_spot_asset_spec_for_pair_id(asset) for asset in ASSETS.split(",")]
+    publisher_client = EmpiricPublisherClient()
+    publisher_client.add_fetchers(
+        [
+            fetcher(assets, "PRAGMA")
+            for fetcher in (
+                BitstampFetcher,
+                CexFetcher,
+                CoinbaseFetcher,
+                AscendexFetcher,
+                DefillamaFetcher
+            )
+        ]
+    )
+    
+    _entries = await publisher_client.fetch()
+    serialized_spot_entries = SpotEntry.serialize_entries(_entries)
+
+    while True:
+        abi = json.load(open(get_artifact("Oracle")))["abi"]
+        await invoke("Proxy", "publish_spot_entries", serialized_spot_entries, abi=abi)
+        time.sleep(1)
     
 
 

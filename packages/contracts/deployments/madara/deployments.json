@@ -1,12 +1,12 @@
 {
   "PublisherRegistry": {
-    "address": "0x425f397e0b429ef3ca5f0cfc0b58b6dd8f91fc1b699b6448b7becf17617dfa0",
-    "tx": "0x4d4b6ad6e00db06562e4fe6472a74c5ca266da147511abcc8e87642cd4c7e5d",
+    "address": "0x42d6814c5576964c9e305884b9b213ed5cefac3375db2b008da48dd67604acc",
+    "tx": "0x66ca9003d48cb1c30c3da06dd843ba73c770e48408effcefbdfa82d4251afec",
     "artifact": "build/PublisherRegistry.json"
   },
   "Proxy": {
-    "address": "0x3c2ebc0c7e6d6858b8359557666fb9e8ec25fc50cbbf84919dba4777328d16f",
-    "tx": "0x3380b86c57bce9d39c8bedeb209aa08d61eb5c308cec50fc4c62dbe94530e92",
+    "address": "0x5676355a5120e4f6e932aac233774638804c06dfb16dd0e49b52242a558dcbe",
+    "tx": "0x4604c5d7ac13fd8b07ce39332623fc2576caadef09b07a0e8c869c52ceec954",
     "artifact": "build/Proxy.json"
   }
 }

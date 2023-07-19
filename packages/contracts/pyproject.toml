@@ -10,7 +10,7 @@ packages = [{ include = "scripts" }]
 python = "^3.9.13,<3.10"
 cairo-lang = "^0.11.2"
 openzeppelin-cairo-contracts = "^0.6.1"
-empiric-network = "^1.6.5"
+empiric-network = "1.6.6"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
