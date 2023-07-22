@@ -29,6 +29,7 @@ from empiric.publisher.fetchers import (
 )
 from empiric.publisher.assets import get_spot_asset_spec_for_pair_id
 from empiric.core.entry import SpotEntry
+from empiric.core.utils import currency_pair_to_pair_id
 
 
 logging.basicConfig()
@@ -78,13 +79,20 @@ async def main():
         ]
     )
     
-    _entries = await publisher_client.fetch()
-    serialized_spot_entries = SpotEntry.serialize_entries(_entries)
 
+    pairs = [
+        currency_pair_to_pair_id(*p["pair"]) for p in assets if p["type"] == "SPOT"
+    ]
+
+    abi = json.load(open(get_artifact("Oracle")))["abi"]
+    abi_summary = json.load(open(get_artifact("SummaryStats")))["abi"]
     while True:
-        abi = json.load(open(get_artifact("Oracle")))["abi"]
+        _entries = await publisher_client.fetch()
+        serialized_spot_entries = SpotEntry.serialize_entries(_entries)
         await invoke("Proxy", "publish_spot_entries", serialized_spot_entries, abi=abi)
-        time.sleep(1)
+        # await invoke("Proxy", "set_checkpoints", pairs, 84959893733710, abi=abi)
+        # await invoke("SummaryStats", "save_volatilities", pairs, 1, 1, abi=abi_summary)
+        # time.sleep(1)
     
 
 

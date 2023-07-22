@@ -59,6 +59,10 @@ async def main():
         "Proxy",
         *constructor_args
     )
+    deployments["SummaryStats"] = await deploy(
+        "SummaryStats",
+        deployments["Proxy"]["address"]
+    )
     dump_deployments(deployments)
 
     

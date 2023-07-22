@@ -129,7 +129,7 @@ func SubmittedPair(pair: Pair) {
 }
 
 @event
-func CheckpointSpotEntry(pair_id: felt) {
+func CheckpointSpotEntry(pair_id: felt, checkpoint: Checkpoint) {
 }
 
 namespace Oracle {
@@ -663,7 +663,7 @@ namespace Oracle {
             let (cur_ix) = Oracle__checkpoint_index.read(key);
             Oracle__checkpoints.write(key, cur_ix, checkpoint);
             Oracle__checkpoint_index.write(key, cur_ix + 1);
-            CheckpointSpotEntry.emit(key);
+            CheckpointSpotEntry.emit(key, checkpoint);
             return ();
         }
         return ();
