@@ -30,7 +30,7 @@ async def main():
         f"with RPC {RPC_CLIENT.url}"
     )
     account = await get_starknet_account()
-    if NETWORK["name"] in ["madara", "sharingan", "pragma-testnet"] and account.address == 1:
+    if NETWORK["name"] in ["madara", "madara_tsukuyomi", "sharingan", "pragma-testnet"] and account.address == 1:
         await deploy_starknet_account(amount=100)
     account = await get_starknet_account()
     logger.info(f"ℹ️  Using account {hex(account.address)} as deployer")

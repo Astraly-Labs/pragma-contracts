@@ -150,7 +150,7 @@ async def fund_address(address: Union[int, str], amount: float):
             )
         prepared = eth_contract.functions["transfer"].prepare(address, int(amount))
         # TODO: remove when madara has a regular default account
-        if NETWORK["name"] in ["madara", "sharingan"] and account.address == 1:
+        if NETWORK["name"] in ["madara", "madara_tsukuyomi", "sharingan"] and account.address == 1:
             transaction = Invoke(
                 calldata=[
                     prepared.to_addr,
@@ -431,13 +431,13 @@ async def wait_for_transaction(*args, **kwargs):
         0.1
         if NETWORK["name"] in ["devnet", "katana"]
         else 1
-        if NETWORK["name"] in ["madara", "pragma_testnet"]
+        if NETWORK["name"] in ["madara", "madara_tsukuyomi", "pragma_testnet"]
         else 6,
     )
     max_wait = kwargs.get(
         "max_wait",
         60 * 5
-        if NETWORK["name"] not in ["devnet", "katana", "madara", "sharingan"]
+        if NETWORK["name"] not in ["devnet", "katana", "madara", "madara_tsukuyomi", "sharingan"]
         else 30,
     )
     transaction_hash = args[0] if args else kwargs["tx_hash"]

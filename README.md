@@ -11,7 +11,7 @@ cd packages/contracts
 poetry install
 cp .env.example .env
 STARKNET_NETWORK=pragma_testnet poetry run python scripts/compile_all.py
-STARKNET_NETWORK=pragma_testnet poetry run python scripts/deploy_pragma.py
+STARKNET_NETWORK=pragma_testnet PRAGMA_ACCOUNT_ADDRESS=<account_address> PRAGMA_PRIVATE_KEY=<private_key> poetry run python scripts/deploy_pragma.py
 ```
 
 See also the [contracts README](./packages/contracts/README.md)

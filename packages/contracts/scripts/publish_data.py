@@ -48,19 +48,26 @@ async def main():
     )
     account = await get_starknet_account()
     
-    # %% Add publisher
-    await invoke("PublisherRegistry", "add_publisher", "PRAGMA", account.address)
-    logger.info(
-        f"ℹ️  Publisher 'PRAGMA' added"
-    )
-    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "BITSTAMP")
-    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "CEX")
-    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "COINBASE")
-    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "ASCENDEX")
-    await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "DEFILLAMA")
-    logger.info(
-        f"ℹ️  Sources added for publisher 'PRAGMA' "
-    )
+    current_publishers = await call("PublisherRegistry", "get_all_publishers")
+    if len(current_publishers.publishers) > 0 and 88314212732225 in current_publishers.publishers:
+        logger.info(
+            f"ℹ️  Publisher 'PRAGMA' already added"
+        )
+    else:
+        # %% Add publisher
+        await invoke("PublisherRegistry", "add_publisher", "PRAGMA", account.address)
+        logger.info(
+            f"ℹ️  Publisher 'PRAGMA' added"
+        )
+        await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "BITSTAMP")
+        await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "CEX")
+        await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "COINBASE")
+        await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "ASCENDEX")
+        await invoke("PublisherRegistry", "add_source_for_publisher", "PRAGMA", "DEFILLAMA")
+        logger.info(
+            f"ℹ️  Sources added for publisher 'PRAGMA' "
+        )
+    
 
 
     # %% Publish data

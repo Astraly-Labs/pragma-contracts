@@ -1,12 +1,17 @@
 {
   "PublisherRegistry": {
-    "address": "0x42d6814c5576964c9e305884b9b213ed5cefac3375db2b008da48dd67604acc",
-    "tx": "0x66ca9003d48cb1c30c3da06dd843ba73c770e48408effcefbdfa82d4251afec",
+    "address": "0x73258f5464c573c769ccd2f881c47c785215ae36a032f73c56c77a5d290c064",
+    "tx": "0x4b623e756d53661622bee3873250a8bb4b778d2f632d3602f1cca842cfad160",
     "artifact": "build/PublisherRegistry.json"
   },
   "Proxy": {
-    "address": "0x5676355a5120e4f6e932aac233774638804c06dfb16dd0e49b52242a558dcbe",
-    "tx": "0x4604c5d7ac13fd8b07ce39332623fc2576caadef09b07a0e8c869c52ceec954",
+    "address": "0xeb40c6fdbac7969b304110febeae5130d4b34076e7e050e07b8fe36a97147f",
+    "tx": "0x1b653dd69a6b2d8f2e583366781d5fe67aa712bd42c79427f1d6c8463af0fd9",
     "artifact": "build/Proxy.json"
+  },
+  "SummaryStats": {
+    "address": "0x751d0ba99dffa6aa9455703eeeed2f2a02ade31ccb3e53ccea3ecd1fcefa77b",
+    "tx": "0x2570c71902e2ce9b3252161f4e001cba0920682bc46c01cbc637471e814cc7d",
+    "artifact": "build/SummaryStats.json"
   }
 }
