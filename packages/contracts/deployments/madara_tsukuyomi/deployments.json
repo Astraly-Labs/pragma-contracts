@@ -1,0 +1,17 @@
+{
+  "PublisherRegistry": {
+    "address": "0x7483cec6616f6d55475fe4b3eeadbbc5a01089b3d08fa711f54768a14e44cf9",
+    "tx": "0x7d0ff433294521df653466c13a3cf32a1186398bc5d1b5480f2ece3fe68bcad",
+    "artifact": "build/PublisherRegistry.json"
+  },
+  "Proxy": {
+    "address": "0x24075870eacc761c135fcf34968d0835af410a84ffb015eda300ca332534b8b",
+    "tx": "0x76d517cbbbf7d61bdd9423bee881c03786cb4eaca8807e9afa80684c42363ce",
+    "artifact": "build/Proxy.json"
+  },
+  "SummaryStats": {
+    "address": "0x1d20617c5a9d87fc46e03244447c0ef9f971cc0620b8f8e6c68f1053cfbcd87",
+    "tx": "0x2d70ae752b986cd6625d3f518382579da486fc3419714e1528a901f4fcff5c",
+    "artifact": "build/SummaryStats.json"
+  }
+}

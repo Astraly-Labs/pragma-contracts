@@ -22,8 +22,8 @@ RUN poetry install
 # RUN python scripts/compile_all.py
 
 ENV STARKNET_NETWORK=madara_tsukuyomi \
-    MADARA_ACCOUNT_ADDRESS=0x2 \
-    MADARA_PRIVATE_KEY=0x00c1cf1490de1352865301bb8705143f3ef938f97fdf892f1090dcb5ac7bcd1d
+    MADARA_TSUKUYOMI_ACCOUNT_ADDRESS=0x2 \
+    MADARA_TSUKUYOMI_PRIVATE_KEY=0x00c1cf1490de1352865301bb8705143f3ef938f97fdf892f1090dcb5ac7bcd1d
 # Make the script executable
 RUN chmod +x ./entrypoint.sh
 CMD [ "./entrypoint.sh" ]

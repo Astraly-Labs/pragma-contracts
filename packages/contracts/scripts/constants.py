@@ -25,7 +25,7 @@ NETWORKS = {
         "rpc_url": "http://127.0.0.1:9944",
     },
     "madara_tsukuyomi": {
-        "name": "madara",
+        "name": "madara_tsukuyomi",
         "explorer_url": "",
         "rpc_url": "http://host.docker.internal:9944",
     },

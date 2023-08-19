@@ -41,11 +41,13 @@ async def main():
     }
     dump_declarations(class_hash)
 
+    salt = 1 if NETWORK["name"] in ["madara_tsukuyomi"] else None
     # %% Deploy
     deployments = {}
     deployments["PublisherRegistry"] = await deploy(
         "PublisherRegistry",
-        account.address
+        account.address,
+        salt=salt
     )
     selector = ContractFunction.get_selector("initializer")
     calldata = [account.address, deployments["PublisherRegistry"]["address"], len(CURRENCIES)]
@@ -57,11 +59,13 @@ async def main():
     constructor_args = [class_hash["Oracle"], selector, calldata]
     deployments["Proxy"] = await deploy(
         "Proxy",
-        *constructor_args
+        *constructor_args,
+        salt=salt
     )
     deployments["SummaryStats"] = await deploy(
         "SummaryStats",
-        deployments["Proxy"]["address"]
+        deployments["Proxy"]["address"],
+        salt=salt
     )
     dump_deployments(deployments)
 
