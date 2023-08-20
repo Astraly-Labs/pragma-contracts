@@ -12,7 +12,7 @@ from typing import Union, cast
 import requests
 from marshmallow import EXCLUDE
 from starknet_py.common import create_compiled_contract
-from starknet_py.contract import Contract, InvokeResult
+from starknet_py.contract import Contract, InvokeResult,DeployResult
 from starknet_py.hash.address import compute_address
 from starknet_py.hash.class_hash import compute_class_hash
 from starknet_py.hash.transaction import compute_declare_transaction_hash
@@ -28,6 +28,7 @@ from starknet_py.net.models.transaction import Declare, Invoke
 from starknet_py.net.schemas.rpc import DeclareTransactionResponseSchema
 from starknet_py.net.signer.stark_curve_signer import KeyPair
 from starkware.starknet.public.abi import get_selector_from_name
+from starknet_py.net.udc_deployer.deployer import Deployer,DEFAULT_DEPLOYER_ADDRESS
 
 from scripts.constants import (
     BUILD_DIR,
@@ -150,7 +151,7 @@ async def fund_address(address: Union[int, str], amount: float):
             )
         prepared = eth_contract.functions["transfer"].prepare(address, int(amount))
         # TODO: remove when madara has a regular default account
-        if NETWORK["name"] in ["madara", "sharingan"] and account.address == 1:
+        if NETWORK["name"] in ["madara", "madara_tsukuyomi", "sharingan"] and account.address == 1:
             transaction = Invoke(
                 calldata=[
                     prepared.to_addr,
@@ -362,17 +363,63 @@ async def declare(contract_name):
     return resp.class_hash
 
 
-async def deploy(contract_name, *args):
+async def deploy(contract_name, *args, salt=None):
     logger.info(f"ℹ️  Deploying {contract_name}")
     abi = json.loads(Path(get_artifact(contract_name)).read_text())["abi"]
     account = await get_starknet_account()
-    deploy_result = await Contract.deploy_contract(
-        account=account,
-        class_hash=get_declarations()[contract_name],
-        abi=abi,
-        constructor_args=list(args),
-        max_fee=int(1e17),
-    )
+
+    class_hash = get_declarations()[contract_name]
+    calldata = list(args)
+    max_fee = int(1e17)
+    deploy_result = None
+    if not salt:
+        deploy_result = await Contract.deploy_contract(
+            account=account,
+            class_hash=class_hash,
+            abi=abi,
+            constructor_args=calldata,
+            max_fee=max_fee,
+        )
+    else:
+        # branching this seperately becasue I couldn't find a way to add a custom salt in `Contract.deploy_contract`
+        deployer = Deployer(
+            deployer_address=DEFAULT_DEPLOYER_ADDRESS, account_address=account.address
+        )
+        deploy_call, address = deployer.create_contract_deployment(
+            class_hash=class_hash, abi=abi, calldata=calldata, salt=salt
+        )
+        
+        try:
+            existing_class_hash = await RPC_CLIENT.get_class_hash_at(address)
+            if existing_class_hash == class_hash:
+                logger.info(
+                    f"✅ {contract_name} deployed at: {hex(address)}"
+                )
+                return {
+                    "address": address,
+                    "tx": 0,
+                    "artifact": get_artifact(contract_name),
+                }
+            else:
+                raise Exception("Different contract already deployed at this address")
+        except:
+            pass
+        
+        res = await account.execute(
+            calls=deploy_call, max_fee=max_fee, auto_estimate=False
+        )
+
+        deployed_contract = Contract(
+            provider=account,
+            address=address,
+            abi=abi,
+        )
+        deploy_result = DeployResult(
+            hash=res.transaction_hash,
+            _client=account.client,
+            deployed_contract=deployed_contract,
+        )
+
     status = await wait_for_transaction(deploy_result.hash)
     status = "✅" if status == TransactionStatus.ACCEPTED_ON_L2 else "❌"
     logger.info(
@@ -383,6 +430,7 @@ async def deploy(contract_name, *args):
         "tx": deploy_result.hash,
         "artifact": get_artifact(contract_name),
     }
+
 
 
 async def invoke(contract_name, function_name, *inputs, address=None, abi=None):
@@ -431,13 +479,13 @@ async def wait_for_transaction(*args, **kwargs):
         0.1
         if NETWORK["name"] in ["devnet", "katana"]
         else 1
-        if NETWORK["name"] in ["madara", "pragma_testnet"]
+        if NETWORK["name"] in ["madara", "madara_tsukuyomi", "pragma_testnet"]
         else 6,
     )
     max_wait = kwargs.get(
         "max_wait",
         60 * 5
-        if NETWORK["name"] not in ["devnet", "katana", "madara", "sharingan"]
+        if NETWORK["name"] not in ["devnet", "katana", "madara", "madara_tsukuyomi", "sharingan"]
         else 30,
     )
     transaction_hash = args[0] if args else kwargs["tx_hash"]
